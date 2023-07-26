@@ -18,7 +18,7 @@ func main() {
 	app.Get("/", hello)
 
 	// Start server
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":3001"))
 }
 
 // Handler
