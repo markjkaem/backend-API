@@ -15,7 +15,7 @@ func main() {
 		AllowHeaders:  "Origin, Content-Type, Accept",
 	}))
 
-	app.Get("/", hello)
+	app.Get("/", generateMessage)
 
 	port := os.Getenv("PORT")
 
@@ -27,8 +27,8 @@ func main() {
 }
 
 
-func hello(c *fiber.Ctx) error {
-	message := "World"
+func generateMessage(c *fiber.Ctx) error {
+	message := "Mark"
 	
 	return c.SendString("Hello" + message + " 👋!")
 }
