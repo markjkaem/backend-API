@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -13,14 +12,27 @@ import (
 	"gorm.io/gorm"
 )
 
-type Item struct {
+type Products struct {
 	gorm.Model
-	Code  string
-	Price uint
+	id         string
+	name       string
+	collection string
+	image      string
+	created_at string
+	updated_at string
+	deleted_at string
+	code       string
+	price      string
 }
 type Person struct {
-	Email   string
-	Balance string
+	Email   string `json:"email"`
+	Balance string `json:"balance"`
+}
+type Candidate struct {
+	Name       string   `json:"name"`
+	Interests  []string `json:"interests"`
+	Language   string   `json:"language"`
+	Experience bool     `json:"experience"`
 }
 
 func main() {
@@ -46,29 +58,99 @@ func main() {
 }
 
 func generateMessage(c *fiber.Ctx) error {
-	message := "Mark"
+	// db, err := gorm.Open(mysql.Open("ice7w3ai5sg3qkntzjj7:pscale_pw_CPeqjtaSekzjVPS9b1AIjLDyrSpQWxZ3N7pIWQtUUdO@tcp(aws.connect.psdb.cloud)/test?tls=true"), &gorm.Config{})
 
-	return c.SendString("Hello " + message + " 👋!")
+	// if err != nil {
+	// 	panic("Failed to connect database")
+	// }
+
+	// result := map[string]interface{}{}
+	// db.Model(&Products{}).First(&result)
+
+	candidates := []Candidate{
+		{
+			Name:       "ravi",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "golang",
+			Experience: false,
+		},
+		{
+			Name:       "mark",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "xavi",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "roger",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "vascos",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "ravi",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "golang",
+			Experience: false,
+		},
+		{
+			Name:       "mark",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "xavi",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "roger",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+		{
+			Name:       "vascos",
+			Interests:  []string{"art", "coding", "music", "travel"},
+			Language:   "typescript",
+			Experience: false,
+		},
+	}
+
+	return c.JSON(fiber.Map{
+		"candidates": candidates})
 }
 
 func queryMessage(c *fiber.Ctx) error {
-	ch := make(chan string)
-	chTwo := make(chan int)
+	convertedEmail := make(chan string)
+	convertedBalance := make(chan string)
 
 	go func() {
 		result := performTask()
-		ch <- result
+		convertedEmail <- result
 	}()
 
 	go func() {
 		result := performTaskTwo()
-		chTwo <- result
+		convertedBalance <- result
 	}()
 
-	amount := strconv.Itoa(<-chTwo)
 	user := Person{
-		Email:   <-ch,
-		Balance: amount,
+		Email:   <-convertedEmail,
+		Balance: <-convertedBalance,
 	}
 
 	u, err := json.Marshal(user)
@@ -83,26 +165,6 @@ func performTask() string {
 	return "mark.teekens@outlook.com"
 }
 
-func performTaskTwo() int {
-	return 3000
+func performTaskTwo() string {
+	return "10"
 }
-
-// db, err := gorm.Open(mysql.Open("ice7w3ai5sg3qkntzjj7:pscale_pw_CPeqjtaSekzjVPS9b1AIjLDyrSpQWxZ3N7pIWQtUUdO@tcp(aws.connect.psdb.cloud)/test?tls=true"), &gorm.Config{})
-
-// if err != nil {
-// 	panic("Failed to connect database")
-// }
-
-// db.AutoMigrate(&Item{})
-
-// // Create
-// db.Create(&Item{Code: "D42", Price: 100})
-
-// // Read
-// var product Item
-
-// db.First(&product)
-
-// result := map[string]interface{}{}
-
-// db.Table("Item").Take(&result)
