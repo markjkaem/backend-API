@@ -1,9 +1,10 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
+
+	"context"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -65,11 +66,7 @@ func generateMessage(c *fiber.Ctx) error {
 func connectdb() *mongo.Client {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 
-	connectionString := os.Getenv("MONGODB_CONNECTION_STRING")
-	if connectionString == "" {
-		panic("MONGODB_CONNECTION_STRING environment variable not set")
-	}
-	opts := options.Client().ApplyURI(connectionString).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI("mongodb+srv://markteek:piKrIsraISZ1Fkmx@cluster0.jwvmkzi.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
