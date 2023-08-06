@@ -8,6 +8,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,6 +17,10 @@ import (
 
 func main() {
 
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
@@ -65,8 +70,11 @@ func generateMessage(c *fiber.Ctx) error {
 
 func connectdb() *mongo.Client {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-
-	opts := options.Client().ApplyURI("mongodb+srv://markteek:piKrIsraISZ1Fkmx@cluster0.jwvmkzi.mongodb.net/?retryWrites=true&w=majority").SetServerAPIOptions(serverAPI)
+	connectionString := os.Getenv("MONGODB_CONNECTIONSTRING")
+	if connectionString == "" {
+		log.Fatalf("The connection string was not privided, error.")
+	}
+	opts := options.Client().ApplyURI(connectionString).SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
