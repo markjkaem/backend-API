@@ -18,7 +18,7 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://nuxt-go-three.vercel.app, https://drizzleorm.vercel.app, https://babachulz.vercel.app",
+		AllowOrigins: "https://nuxt-go-three.vercel.app, https://drizzleorm.vercel.app, https://babachulz.vercel.app, http://localhost:3000",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
